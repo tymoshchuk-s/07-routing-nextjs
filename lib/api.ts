@@ -13,6 +13,12 @@ const headers = {
   Authorization: `Bearer ${TOKEN}`,
 };
 
+const formatTag = (tag: string) => {
+  if (!tag || tag === "all") return "";
+  return tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase();
+};
+
+
 export const fetchNotes = async (
   search: string,
   page: number,
@@ -26,16 +32,19 @@ export const fetchNotes = async (
     params.search = search;
   }
 
-  if (tag && tag !== "All") {
-    params.tag = tag;
+  const apiTag = formatTag(tag ?? "all");
+
+  if (apiTag) {
+    params.tag = apiTag;
   }
 
-  const { data } = await axios.get<NotesHttpResponse>(`${BASE_URL}/notes`, {
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-    },
-    params,
-  });
+  const { data } = await axios.get<NotesHttpResponse>(
+    `${BASE_URL}/notes`,
+    {
+      headers,
+      params,
+    }
+  );
 
   return data;
 };

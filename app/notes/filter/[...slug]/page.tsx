@@ -7,7 +7,7 @@ type Props = {
 
 export default async function Notes({ params }: Props) {
   const { slug } = await params;
-  const tagFromUrl = slug[0] === "All" ? "" : slug[0];
+  const tagFromUrl = slug[0]?.toLowerCase() || "all";
   const initialData = await fetchNotes("", 1, tagFromUrl);
 
   return (
